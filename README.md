@@ -9,3 +9,5 @@ myblog
 when author/ user does not created any blog yet
 ![image](https://github.com/user-attachments/assets/048d09c7-5123-438f-b0e5-773b5ae5eeda)
   
+blog card
+![Uploading image.png…]()
