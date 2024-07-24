@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BlogCard from "../components/BlogCard";
+import { Box, Typography, CircularProgress } from "@mui/material";
+
 const UserBlogs = () => {
   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  //get user blogs
+  // Get user blogs
   const getUserBlogs = async () => {
     try {
       const id = localStorage.getItem("userId");
@@ -13,19 +17,34 @@ const UserBlogs = () => {
         setBlogs(data?.userBlog.blogs);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setError("Failed to fetch blogs. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getUserBlogs();
   }, []);
-  console.log(blogs);
+
   return (
-    <div>
-      {blogs && blogs.length > 0 ? (
+    <Box
+      padding={3}
+      margin="auto"
+      maxWidth="1200px"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
+      {loading ? (
+        <CircularProgress />
+      ) : error ? (
+        <Typography color="error">{error}</Typography>
+      ) : blogs.length > 0 ? (
         blogs.map((blog) => (
           <BlogCard
+            key={blog._id}
             id={blog._id}
             isUser={true}
             title={blog.title}
@@ -36,9 +55,11 @@ const UserBlogs = () => {
           />
         ))
       ) : (
-        <h1>You Havent Created a blog</h1>
+        <Typography variant="h6" color="textSecondary">
+          You haven't created any blogs yet.
+        </Typography>
       )}
-    </div>
+    </Box>
   );
 };
 
